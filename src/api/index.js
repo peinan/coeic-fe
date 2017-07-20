@@ -1,8 +1,8 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const models = require('../../models');
 
 const router = express.Router();
-const models = require('../../models');
-const bodyParser = require('body-parser');
 
 // POSTパラメータをJSONで取得する設定
 router.use(bodyParser.urlencoded({
@@ -31,7 +31,7 @@ router.post('/uploaded-img', (req, res) => {
   const c = 'abcdefghijklmnopqrstuvwxyz0123456789'; // 生成する文字列に含める文字セット
   const cl = c.length;
   let filename = '';
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 16; i += 1) {
     filename += c[Math.floor(Math.random() * cl)];
   }
   filename += '.jpg';
@@ -39,11 +39,11 @@ router.post('/uploaded-img', (req, res) => {
   // TODO 既に存在するファイル名の場合は生成し直し
 
   models.uploaded_img.findOrCreate({
-    where: { 'filename': filename },
-    defaults: { 'status': 'todo' }
+    where: { filename },
+    defaults: { status: 'todo' },
   })
-  .spread((uploadedImg, created) => {
-    res.send(uploadedImg.get({plain: true }));
+  .spread((uploadedImg) => {
+    res.send(uploadedImg.get({ plain: true }));
   });
 });
 

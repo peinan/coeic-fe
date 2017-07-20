@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
@@ -13,7 +12,6 @@ export default new Vuex.Store({
   mutations: {
     // 画像リストの更新
     setImgs(state, imgs) {
-      /* eslint-disable no-param-reassign */
       state.imgs = imgs;
     },
   },

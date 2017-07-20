@@ -15,9 +15,6 @@
 </template>
 
 <script>
-/* eslint-disable object-shorthand */
-/* eslint-disable func-names */
-/* eslint-disable no-console */
 import axios from 'axios';
 
 export default {
@@ -35,7 +32,7 @@ export default {
   },
   methods: {
     /* 画像アップロードの実行。成功したら画像一覧を更新。 */
-    submit: function () {
+    submit() {
       axios.post('/api/uploaded-img', {})
       .then(() => {
         this.$store.dispatch('getImgs');
