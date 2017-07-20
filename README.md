@@ -1,4 +1,4 @@
-# hd14-fe
+# coeic-fe
 フロントエンドのコード。
 
 ## Build Setup
@@ -35,7 +35,7 @@ npm test
 curl -w '\n' 'http://localhost:8080/api/uploaded-img' --data "is_oneframe=false" -XPOST
 ```
 
-## DB migration
+## DB migration
 
 予め、`npm i -g sequelize-cli`を実行してCLIをインストールおくこと。
 また、プロジェクトのルートで`sequelize init`を実施済みであること。
@@ -47,19 +47,4 @@ sequelize model:create --name hoge --underscored --attributes fuga_1:string,fuga
 sequelize db:migrate --env development|production
 ```
 
-テーブル定義を変更する時は、migrationファイルを作成するのかな？（試してない）
-
-## TODO
-* 不要なvueコードを削ぎ落としていく。
-* vuex導入
-* eslintのエラー修正
-* eslintの改修
-* 実装
-  * モデルの作成
-  * APIの実装
-    * 必要なエラー処理も
-    * 画像・音声の送受信も
-  * Sassとか使うならのその設定
-  * 本番へのデプロイ
-    * DBとか設定必要なはず
-  * UI
+テーブル定義を変更する時は、migrationファイルを作成するのかな？（試してない）
