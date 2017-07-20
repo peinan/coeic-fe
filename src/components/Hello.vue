@@ -3,8 +3,6 @@
     <h1>マンガ自動読み上げ機</h1>
     <h2>Upload Comic</h2>
     <p>
-      <input type="checkbox" id="checkbox" v-model="is_oneframe">
-      <label for="checkbox">１コマ画像ならチェック！</label>
       <button v-on:click="submit">Upload</button>
     </p>
     <h2>Uploaded Comic</h2>
@@ -24,12 +22,11 @@ import axios from 'axios';
 
 export default {
   name: 'hello',
-  data() {
-    return {
-      // 1コマ画像かどうか
-      is_oneframe: true,
-    };
-  },
+  // data() {
+  //   return {
+  //     key: value,
+  //   };
+  // },
   computed: {
     /* アップロードされた画像のリスト */
     imgs() {
@@ -39,7 +36,7 @@ export default {
   methods: {
     /* 画像アップロードの実行。成功したら画像一覧を更新。 */
     submit: function () {
-      axios.post('/api/uploaded-img', { is_oneframe: this.is_oneframe })
+      axios.post('/api/uploaded-img', {})
       .then(() => {
         this.$store.dispatch('getImgs');
       });

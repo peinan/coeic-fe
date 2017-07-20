@@ -40,7 +40,7 @@ router.post('/uploaded-img', (req, res) => {
 
   models.uploaded_img.findOrCreate({
     where: { 'filename': filename },
-    defaults: { 'is_oneframe': req.body.is_oneframe }
+    defaults: { 'status': 'todo' }
   })
   .spread((uploadedImg, created) => {
     res.send(uploadedImg.get({plain: true }));

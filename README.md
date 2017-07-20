@@ -46,4 +46,10 @@ sequelize model:create --name hoge --underscored --attributes fuga_1:string,fuga
 sequelize db:migrate --env development|production
 ```
 
-テーブル定義を変更する時は、migrationファイルを作成するのかな？（試してない）
+* テーブル定義を変更する時
+  * migrationファイルを作成するのかな？（試してない）
+  * 場合によっては `sequelize model:create` をやり直した方が早い？
+    * その場合は `--force` optionを付与する。
+    ``` bash
+    sequelize model:create --force --name hoge --underscored --attributes fuga_1:string,fuga_2:boolean
+    ```
