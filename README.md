@@ -53,3 +53,7 @@ sequelize db:migrate --env development|production
     ``` bash
     sequelize model:create --force --name hoge --underscored --attributes fuga_1:string,fuga_2:boolean
     ```
+
+## herokuへのdeploy
+* 都合上、本来devDependenciesのパッケージもdependenciesとしている。
+  * herokuのコンテナ上でビルドが実施されるため。
