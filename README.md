@@ -32,7 +32,7 @@ npm test
 ## POST APIを試せるコマンド
 ``` bash
 # 画像アップロード
-curl -w '\n' 'http://localhost:8080/api/uploaded-img' --data "is_oneframe=false" -XPOST
+curl -w '\n' 'http://localhost:8080/api/uploaded-img' -XPOST
 ```
 
 ## DB migration
