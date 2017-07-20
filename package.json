@@ -22,9 +22,9 @@
     "sqlite3": "^3.1.8",
     "vue": "^2.3.3",
     "vue-router": "^2.6.0",
-    "vuex": "^2.3.1"
-  },
-  "devDependencies": {
+    "vuex": "^2.3.1",
+
+    // 以下は本来devDependenciesだが、herokuへのdeployに対応するためdependenciesとしている
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
