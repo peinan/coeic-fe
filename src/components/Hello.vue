@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>マンガ自動読み上げ機</h1>
+    <h1>coεic</h1>
     <h2>Upload Comic</h2>
     <p>
       <button v-on:click="submit">Upload</button>

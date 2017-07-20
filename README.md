@@ -1,5 +1,7 @@
 # coeic-fe
-フロントエンドのコード。
+coεicのフロントエンドのコード。本番環境は下記。
+
+https://coeic.herokuapp.com/
 
 ## Build Setup
 
@@ -55,5 +57,11 @@ sequelize db:migrate --env development|production
     ```
 
 ## herokuへのdeploy
+* 下記コマンドでmasterブランチのコードをデプロイできる。
+* 川原以外が実施する時はherokuのアクセス権限を付与すればよい？
+```
+git push heroku master
+```
 * 都合上、本来devDependenciesのパッケージもdependenciesとしている。
   * herokuのコンテナ上でビルドが実施されるため。
+  * https://github.com/peinan/coeic-fe/wiki
