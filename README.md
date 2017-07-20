@@ -29,7 +29,7 @@ npm run e2e
 npm test
 ```
 
-## POST API
+## POST APIを試せるコマンド
 ``` bash
 # 画像アップロード
 curl -w '\n' 'http://localhost:8080/api/uploaded-img' --data "is_oneframe=false" -XPOST
@@ -37,13 +37,12 @@ curl -w '\n' 'http://localhost:8080/api/uploaded-img' --data "is_oneframe=false"
 
 ## DB migration
 
-予め、`npm i -g sequelize-cli`を実行してCLIをインストールおくこと。
-また、プロジェクトのルートで`sequelize init`を実施済みであること。
+* 予め、 `npm i -g sequelize-cli` を実行してCLIをインストールおくこと。
 
 ``` bash
 # 新たに「hoge」という名前のモデルを作成。fuga_1, fuga_2というカラムを持つ。
 sequelize model:create --name hoge --underscored --attributes fuga_1:string,fuga_2:boolean
-# マイグレーション（定義を変更したら実行すること！）
+# マイグレーション（環境構築時や、定義変更時は実行すること！）
 sequelize db:migrate --env development|production
 ```
 
