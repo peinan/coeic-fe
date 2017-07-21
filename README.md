@@ -65,3 +65,11 @@ git push heroku master
 * 都合上、本来devDependenciesのパッケージもdependenciesとしている。
   * herokuのコンテナ上でビルドが実施されるため。
   * https://github.com/peinan/coeic-fe/wiki
+
+## 認証方法の変更
+``` bash
+# IP認証（社内アクセスのみ許可する場合）
+heroku config:set AUTH=IP
+# BASIC認証
+heroku config:set AUTH=BASIC
+```
