@@ -5,6 +5,8 @@ import axios from 'axios';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  // prod以外では厳格モードとする
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     // アップロードされた画像リスト
     imgs: [],
