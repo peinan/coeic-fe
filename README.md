@@ -62,9 +62,6 @@ sequelize db:migrate --env development|production
 ```
 git push heroku master
 ```
-* 都合上、本来devDependenciesのパッケージもdependenciesとしている。
-  * herokuのコンテナ上でビルドが実施されるため。
-  * https://github.com/peinan/coeic-fe/wiki
 
 ## 認証方法の変更
 ``` bash
