@@ -38,5 +38,5 @@ app.use('/api', api);
 // static file routing
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
-app.listen(port, '127.0.0.1'); // ipv4を利用するため、第２引数を入れる
+app.listen(port); // ipv4を利用するため、第２引数を入れる
 console.log('server started ' + port);
