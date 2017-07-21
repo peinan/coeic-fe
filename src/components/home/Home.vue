@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="home">
     <h1>coεic</h1>
     <h2>Upload Comic</h2>
     <p>
@@ -18,7 +18,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'hello',
+  name: 'home',
   // data() {
   //   return {
   //     key: value,
