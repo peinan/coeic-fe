@@ -25,6 +25,7 @@ app.use((req, res, next) => {
     '103.2.244.0/22',
   ];
   const ip = req.headers['x-forwarded-for'] || req.ip;
+  console.log(ip, rangeCheck.inRange(ip, yahooIps));
   // 社内ipの場合は許可
   if (!rangeCheck.inRange(ip, yahooIps)) {
     // 社外ipの場合はbasic認証
