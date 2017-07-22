@@ -9,14 +9,16 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
     // アップロードされた画像リスト
-    imgs: [],
+    imgs: {},
     // 再生可能かのステータス
     status: null,
   },
   mutations: {
-    // 画像リストの更新
+    // 画像リストの全更新
     setImgs(state, imgs) {
-      state.imgs = imgs;
+      imgs.forEach((img) => {
+        state.imgs[img.id] = img;
+      });
     },
     // statusの更新
     setStatus(state, status) {
