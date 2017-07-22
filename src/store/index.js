@@ -10,11 +10,17 @@ export default new Vuex.Store({
   state: {
     // アップロードされた画像リスト
     imgs: [],
+    // 再生可能かのステータス
+    status: 'todo',
   },
   mutations: {
     // 画像リストの更新
     setImgs(state, imgs) {
       state.imgs = imgs;
+    },
+    // statusの更新
+    setStatus(state, status) {
+      state.status = status;
     },
   },
   actions: {
@@ -23,6 +29,13 @@ export default new Vuex.Store({
       axios.get('/api/uploaded-img')
       .then((res) => {
         commit('setImgs', res.data);
+      });
+    },
+    // 画像リストの取得
+    getStatus({ commit }, payload) {
+      axios.get(`/api/uploaded-img/:${payload.id}`)
+      .then((res) => {
+        commit('setImgs', res.data.status);
       });
     },
   },
