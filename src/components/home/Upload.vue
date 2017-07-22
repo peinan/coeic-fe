@@ -1,8 +1,11 @@
 <template>
   <div class="upload">
-    <dropzone id="myVueDropzone" url="https://httpbin.org/post" v-on:vdropzone-success="showSuccess">
-        <!-- Optional parameters if any! -->
-        <input type="hidden" name="token" value="xxx">
+    <dropzone
+      id="dropzone"
+      url="/api/uploaded-img"
+      :maxFileSizeInMB="100"
+      acceptedFileTypes="image/*"
+    >
     </dropzone>
   </div>
 </template>
@@ -14,11 +17,6 @@ export default {
   name: 'upload',
   components: {
     Dropzone,
-  },
-  methods: {
-    showSuccess(file) {
-      console.log('A file was successfully uploaded', file);
-    },
   },
 };
 </script>
