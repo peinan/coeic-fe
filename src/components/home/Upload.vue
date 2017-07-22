@@ -60,5 +60,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+#dropzone {
+  width: 510px;
+  height: 270px;
+  background: url('../../assets/bg/upload.png') no-repeat 0 0;
+  margin: 30px auto 0px;
+}
 </style>

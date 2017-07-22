@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <img src="../../assets/logo.svg" style="width:80%;height:80%;">
-    <router-view></router-view>
+    <div id="main">
+      <h1><img src="../../assets/logo-copy.png" width="313" height="146"></h1>
+      <router-view></router-view>
+    </div>
     <List/>
   </div>
 </template>
@@ -26,4 +28,17 @@ h1, h2 {
 a {
   color: #42b983;
 }
+
+#main {
+  width: 950px;
+  margin: 0 auto;
+  background: url('../../assets/bg/main-base.png') no-repeat center center;
+  background-size: cover;
+  padding: 40px 10px;
+}
+
+#app {
+
+}
+
 </style>
