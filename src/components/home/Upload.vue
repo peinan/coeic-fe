@@ -6,7 +6,7 @@
       acceptedFileTypes="image/*"
       :maxFileSizeInMB="100"
       :preview-template="template"
-      @vdropzone-success="getImgs"
+      @vdropzone-success="toPlayer"
     >
     </dropzone>
   </div>
@@ -45,11 +45,14 @@ export default {
     },
 
     /**
-     * アップロード画像を全件取得する。
-     * アップロード完了時に呼び、リストを更新する。
+     * プレイヤー画面に遷移する。
+     * アップロード完了時に呼ぶ。
      */
-    getImgs() {
-      this.$store.dispatch('getImgs');
+    toPlayer(file) {
+      this.$router.push({
+        name: 'Player',
+        params: { id: JSON.parse(file.xhr.response).id },
+      });
     },
   },
 };
