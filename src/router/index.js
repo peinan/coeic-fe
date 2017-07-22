@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/components/home/Home';
+import Upload from '@/components/home/Upload';
+import Player from '@/components/home/Player';
 import NotFound from '@/components/error/NotFound';
 
 Vue.use(Router);
@@ -10,8 +11,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home,
+      name: 'Upload',
+      component: Upload,
+    },
+    {
+      path: '/player/:id',
+      name: 'Player',
+      component: Player,
     },
     {
       path: '*',

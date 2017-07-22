@@ -1,23 +1,17 @@
 <template>
-  <div class="home">
-    <Upload/>
+  <div id="app">
+    <img src="../../assets/logo.svg" style="width:80%;height:80%;">
+    <router-view></router-view>
     <List/>
   </div>
 </template>
 
 <script>
-import Upload from './Upload';
 import List from './List';
 
 export default {
   name: 'home',
-  // data() {
-  //   return {
-  //     key: value,
-  //   };
-  // },
   components: {
-    Upload,
     List,
   },
 };

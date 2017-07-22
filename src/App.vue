@@ -1,13 +1,13 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.svg" style="width:80%;height:80%;">
-    <router-view></router-view>
-  </div>
+  <home/>
 </template>
 
 <script>
+import Home from '@/components/home/Home';
+
 export default {
   name: 'app',
+  components: { Home },
 };
 </script>
 
