@@ -3,7 +3,7 @@
     <h2>Uploaded Comic</h2>
     <ul>
       <li v-for="img in imgs" :key="img.id">
-        <img :src="img.filename" :alt="img.filename">
+        <router-link :to="{name: 'Player', params: {id: img.id}}"><img :src="img.filename" :alt="img.filename"></router-link>
       </li>
     </ul>
   </div>
