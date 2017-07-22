@@ -26,14 +26,14 @@ export default new Vuex.Store({
   actions: {
     // 画像リストの取得
     getImgs({ commit }) {
-      axios.get('/api/uploaded-img')
+      axios.get(Vue.prototype.$config.API.UPLOADED_IMG)
       .then((res) => {
         commit('setImgs', res.data);
       });
     },
-    // 画像リストの取得
+    // 画像のstatusを取得
     getStatus({ commit }, payload) {
-      axios.get(`/api/uploaded-img/:${payload.id}`)
+      axios.get(`${Vue.prototype.$config.API.UPLOADED_IMG}/${payload.id}`)
       .then((res) => {
         commit('setImgs', res.data.status);
       });

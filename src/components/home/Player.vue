@@ -14,7 +14,7 @@ export default {
   name: 'player',
   computed: {
     canPlay() {
-      return (this.$store.state.status !== 'done');
+      return (this.$store.state.status === 'done');
     },
   },
   methods: {
@@ -23,8 +23,9 @@ export default {
      */
     checkCanPlay() {
       this.$store.dispatch('getStatus', { id: this.$route.params.id });
-      console.log(this.$store.state.status);
-      if (!this.canPlay) {
+      console.log(this.$route, this.$store.state.status);
+      // ページ遷移しても動き続けてしまうので現在のrouteも確認する
+      if (!this.canPlay && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
       }
     },
