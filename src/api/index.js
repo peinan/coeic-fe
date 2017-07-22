@@ -16,6 +16,15 @@ router.use((req, res, next) => {
   next();
 });
 
+
+/**
+ * アップロードされた画像を1件取得。
+ */
+router.get('/uploaded-img/:id', (req, res) => {
+  models.uploaded_img.findById(req.params.id)
+  .then(uploadedImg => res.send(uploadedImg));
+});
+
 /**
  * アップロードされた画像を全件取得。
  */
@@ -44,6 +53,19 @@ router.post('/uploaded-img', (req, res) => {
   })
   .spread((uploadedImg) => {
     res.send(uploadedImg.get({ plain: true }));
+  });
+});
+
+/**
+ * 画像の更新
+ */
+router.put('/uploaded-img/:id', (req, res) => {
+  models.uploaded_img.update({ status: 'done' }, {
+    where: { id: req.params.id },
+  })
+  .then((result) => {
+    console.log(result);
+    res.send(result);
   });
 });
 

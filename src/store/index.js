@@ -11,7 +11,7 @@ export default new Vuex.Store({
     // アップロードされた画像リスト
     imgs: [],
     // 再生可能かのステータス
-    status: 'todo',
+    status: null,
   },
   mutations: {
     // 画像リストの更新
@@ -33,9 +33,14 @@ export default new Vuex.Store({
     },
     // 画像のstatusを取得
     getStatus({ commit }, payload) {
-      axios.get(`${Vue.prototype.$config.API.UPLOADED_IMG}/${payload.id}`)
-      .then((res) => {
-        commit('setImgs', res.data.status);
+      return new Promise((resolve, reject) => {
+        axios.get(`${Vue.prototype.$config.API.UPLOADED_IMG}/${payload.id}`)
+        .then((res) => {
+          commit('setStatus', res.data.status);
+          resolve(res);
+        }, (error) => {
+          reject(error);
+        });
       });
     },
   },
