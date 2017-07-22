@@ -25,8 +25,14 @@ export default {
     };
   },
   computed: {
+    img() {
+      return this.$store.getters.getImgById(this.$route.params.id);
+    },
     canPlay() {
-      return (this.$store.state.status === 'done');
+      if (this.img && typeof this.img !== 'undefined') {
+        return (this.img.status === 'done');
+      }
+      return false;
     },
   },
   methods: {
@@ -34,7 +40,7 @@ export default {
      * statusがdoneになるまで1秒おきにstatusを確認する
      */
     checkCanPlay() {
-      this.$store.dispatch('getStatus', { id: this.$route.params.id });
+      this.$store.dispatch('getImg', { id: this.$route.params.id });
       // ページ遷移しても動き続けてしまうので現在のrouteも確認する
       if (!this.canPlay && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
@@ -43,22 +49,19 @@ export default {
   },
   // player外から遷移する時に呼ばれる
   created() {
-    this.stateCreated = this.$store.state.status;
+    const img = this.$store.getters.getImgById(this.$route.params.id);
+    this.stateCreated = img ? img.status : 'undefined';
     this.checkCanPlay();
   },
   // player内で遷移する時に呼ばれる
   beforeRouteUpdate(to, from, next) {
-    // 一旦loadingにする
-    this.$store.commit('setStatus', null);
-    // 遷移先の画像のstatusを取得
-    this.$store.dispatch('getStatus', { id: to.params.id }).then(() => {
-      // 初期状態更新
-      this.stateCreated = this.$store.state.status;
-      // 監視
-      this.checkCanPlay();
+    // 初期状態更新
+    const img = this.$store.getters.getImgById(to.params.id);
+    this.stateCreated = img ? img.status : 'undefined';
+    // 監視
+    this.checkCanPlay();
 
-      next();
-    });
+    next();
   },
 };
 </script>
