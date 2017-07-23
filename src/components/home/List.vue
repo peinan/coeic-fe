@@ -3,7 +3,7 @@
     <h2><img src="../../assets/title/list.png" width="193" height="20" alt="最近聴かれた名場面"></h2>
     <ul>
       <li v-for="img in imgs" :key="img.id">
-        <router-link :to="{name: 'Player', params: {id: img.id}}"><img :src="img.filename" :alt="img.filename"></router-link>
+        <router-link :to="{name: 'Player', params: {id: img.id}}"><img :src="img.url" :alt="img.url"></router-link>
       </li>
     </ul>
   </div>

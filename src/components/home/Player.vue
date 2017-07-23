@@ -9,7 +9,7 @@
     <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
-        <a href="/"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
+        <router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link>
         <ul id="frame-playlist">
           <li v-for="(frame, index) in viewableFrames" :key="index">
             <img :src="frame" :alt="frame" style="width:200px;height:200px;">
