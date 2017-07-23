@@ -4,12 +4,22 @@
       <div id="about-base">
         <img src="../../assets/txt/about.png" width="361" height="344" alt="coeicとは、とは、漫画に楽しみを
 プラスするサービスです。音声の読み上げ機能を搭載しており、今後、次のような機能を実装予定です。感情や場面に応じた音声の生成、話者の性別等による音声の分別、音声による操作（アップロードなど）対応">
-        <p><br><br><router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link></p>
+        <p><br><br><a href="javascript:void(0);" @click="historyBack"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a></p>
       </div>
   </div>
 </template>
 
 <script>
+export default {
+  methods: {
+    /**
+     * 1つ前の画面に戻る
+     */
+    historyBack() {
+      this.$router.go(-1);
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
