@@ -10,6 +10,8 @@ export default new Vuex.Store({
   state: {
     // アップロードされた画像リスト
     imgs: [],
+    // 処理済画像のリスト
+    processedImgs: [],
   },
   mutations: {
     // 画像リストの全更新
@@ -21,6 +23,11 @@ export default new Vuex.Store({
       if (state.imgs.find(img2 => img2.id === img.id)) {
         state.imgs.splice(img.id - 1, 1, img);
       }
+    },
+    // 処理済画像の更新
+    setProcessedImgs(state, imgs) {
+      state.processedImgs = imgs;
+      console.log(state.processedImgs);
     },
   },
   getters: {
@@ -42,6 +49,13 @@ export default new Vuex.Store({
       axios.get(`${Vue.prototype.$config.API.UPLOADED_IMG}/${payload.id}`)
       .then((res) => {
         commit('setImg', res.data.result);
+      });
+    },
+    // 処理済み画像の取得
+    getProcessedImgs({ commit }, payload) {
+      axios.get(`${Vue.prototype.$config.API.PROCESSED_IMG}/${payload.id}`)
+      .then((res) => {
+        commit('setProcessedImgs', res.data.result);
       });
     },
   },

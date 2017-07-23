@@ -104,6 +104,9 @@ export default {
       }
       return false;
     },
+    processedImgs() {
+      return this.$store.state.processedImgs;
+    },
   },
   methods: {
     /**
