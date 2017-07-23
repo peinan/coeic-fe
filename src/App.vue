@@ -20,6 +20,17 @@ export default {
 box-sizing: border-box;
 }
 
+a {
+	text-decoration: none;
+	color: #333;
+}
+
+a:hover {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+	-ms-filter: "alpha( opacity=80 )";
+}
+
 body {
   color: #333333;
   font-size: 12px;

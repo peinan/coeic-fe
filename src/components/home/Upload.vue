@@ -79,11 +79,11 @@ export default {
   width: 510px;
   height: 270px;
   background: url('../../assets/bg/upload-base.png') no-repeat 0 0;
-  margin: 40px auto 50px;
+  margin: 40px auto -280px;
   padding-top: 30px;
-  position: absolute;
-  top: 260px;
-  left: 395px;
+  position: relative;
+  top: -320px;
+  left: 5px;
   z-index: 0;
 }
 </style>
