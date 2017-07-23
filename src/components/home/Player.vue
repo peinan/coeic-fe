@@ -269,24 +269,24 @@ export default {
 .icn-arrow{
   stroke: #333;
   fill-opacity: 0;
-  stroke-dasharray: 2000;
-  stroke-dashoffset: 2000;
   -webkit-animation: arrow-jump 1.5s 1s ease infinite;
           animation: arrow-jump 1.5s 1s ease infinite;
+/*  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
   -webkit-animation: arrow-display 2s 1.5s ease 1;
-          animation: arrow-display 2s 1.5s ease 1;
+          animation: arrow-display 2s 1.5s ease 1; */
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
 }
 
-  @-webkit-keyframes arrow-display {
+/*  @-webkit-keyframes arrow-display {
     0% {
       stroke-dashoffset: 2000;
     }
     100% {
       stroke-dashoffset: 0;
     }
-  }
+  } */
 
   @-webkit-keyframes arrow-jump {
     15% {-webkit-transform: translateY(-30%);}
