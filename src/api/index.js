@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+// const http = require('http');
+const request = require('request');
 const models = require('../../models');
 
 const router = express.Router();
@@ -16,6 +18,23 @@ router.use((req, res, next) => {
   next();
 });
 
+/**
+ * GCP側のAPIを叩く（クロスドメイン対策）
+ */
+router.all('/', (req, res) => {
+  const query = req.query;
+  const body = req.body;
+
+  request({
+    method: req.method,
+    uri: `http://104.155.222.216:5000${query.path}`,
+    headers: { 'Content-Type': 'application/json' },
+    qs: query,
+    form: body,
+  }, (error, response, resBody) => {
+    res.send(resBody);
+  });
+});
 
 /**
  * アップロードされた画像を1件取得。
