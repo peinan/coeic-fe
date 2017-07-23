@@ -26,13 +26,13 @@ a {
 }
 
 a:hover {
-	opacity: 0.8;
+	opacity: 0.5;
 	filter: alpha(opacity=80);
 	-ms-filter: "alpha( opacity=80 )";
-  transition: opacity .5s ease-out;
-  -moz-transition: opacity .5s ease-out;
-  -webkit-transition: opacity .5s ease-out;
-  -o-transition: opacity .5s ease-out;
+  transition: opacity .3s ease-out;
+  -moz-transition: opacity .3s ease-out;
+  -webkit-transition: opacity .3s ease-out;
+  -o-transition: opacity .3s ease-out;
 }
 
 body {
