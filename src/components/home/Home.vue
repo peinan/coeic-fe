@@ -4,7 +4,7 @@
       <router-link :to="{name: 'Upload'}"><h1><img src="../../assets/logo.png" width="313" height="146" alt="ダイナミックに漫画を楽しむ。coeic（コエック）"></h1></router-link>
       <router-view></router-view>
       <p><img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください"></p>
-      <p><a href="#"><img src="../../assets/icn/about.png" width="34" height="34" alt="coeicについて"></a></p>
+      <p><router-link :to="{name: 'About'}"><img src="../../assets/icn/about.png" width="34" height="34" alt="coeicについて"></router-link></p>
     </div>
     <List/>
   </div>
