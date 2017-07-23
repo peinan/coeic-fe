@@ -14,6 +14,6 @@ module.exports = {
   API: {
     UPLOADED_IMG: `${API_HOST}/api/uploadedImg`,
     PROCESSED_IMG: `${API_HOST}/api/processedImg`,
-    VOICE: `${API_HOST}/api?path=/api/voice`,
+    VOICE: `${API_HOST}/api/voice`,
   },
 };
