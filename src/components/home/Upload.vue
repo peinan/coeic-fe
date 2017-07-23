@@ -9,6 +9,12 @@
       @vdropzone-success="toPlayer"
     >
     </dropzone>
+    <div class="status">
+      <p><img src="../../assets/icn/upload.png" width="49" height="55" alt="アップロードアイコン"></p>
+      <p><img src="../../assets/txt/drag-drop.png" width="179" height="14" alt="漫画をドラッグ＆ドロップ"></p>
+      <p>または</p>
+      <img src="../../assets/btn/file-select.png" width="140" height="40" alt="ファイルを選択">
+    </div>
   </div>
 </template>
 
@@ -63,7 +69,21 @@ export default {
 #dropzone {
   width: 510px;
   height: 270px;
-  background: url('../../assets/bg/upload.png') no-repeat 0 0;
-  margin: 30px auto 0px;
+  margin: 40px auto 50px;
+  background: none;
+  z-index: 1;
+  position: relative;
+}
+
+.status {
+  width: 510px;
+  height: 270px;
+  background: url('../../assets/bg/upload-base.png') no-repeat 0 0;
+  margin: 40px auto -280px;
+  padding-top: 30px;
+  position: relative;
+  top: -320px;
+  left: 5px;
+  z-index: 0;
 }
 </style>

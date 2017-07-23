@@ -10,17 +10,23 @@ export default new Vuex.Store({
   state: {
     // アップロードされた画像リスト
     imgs: [],
-    // 再生可能かのステータス
-    status: 'todo',
   },
   mutations: {
-    // 画像リストの更新
+    // 画像リストの全更新
     setImgs(state, imgs) {
       state.imgs = imgs;
     },
-    // statusの更新
-    setStatus(state, status) {
-      state.status = status;
+    // 画像の更新
+    setImg(state, img) {
+      if (state.imgs.find(img2 => img2.id === img.id)) {
+        state.imgs.splice(img.id - 1, 1, img);
+      }
+    },
+  },
+  getters: {
+    getImgById: state => (id) => {
+      if (Object.keys(state.imgs).length === 0) return null;
+      return state.imgs.find(img => img.id === id);
     },
   },
   actions: {
@@ -28,14 +34,14 @@ export default new Vuex.Store({
     getImgs({ commit }) {
       axios.get(Vue.prototype.$config.API.UPLOADED_IMG)
       .then((res) => {
-        commit('setImgs', res.data);
+        commit('setImgs', res.data.result);
       });
     },
-    // 画像のstatusを取得
-    getStatus({ commit }, payload) {
+    // 画像の取得
+    getImg({ commit }, payload) {
       axios.get(`${Vue.prototype.$config.API.UPLOADED_IMG}/${payload.id}`)
       .then((res) => {
-        commit('setImgs', res.data.status);
+        commit('setImg', res.data.result);
       });
     },
   },
