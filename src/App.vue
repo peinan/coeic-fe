@@ -12,12 +12,47 @@ export default {
 </script>
 
 <style>
+* {
+-webkit-box-sizing: border-box;
+-ms-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-o-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+	color: #333;
+}
+
+a:hover {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+	-ms-filter: "alpha( opacity=80 )";
+}
+
+body {
+  color: #333333;
+  font-size: 12px;
+  background: url('./assets/bg/bg.jpg') no-repeat;
+  background-size: cover;
+  margin: 0 0 40px;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 40px;
+}
+
+.dz-message {
+  display: none;
+}
+
+.vue-dropzone {
+  border: none;
+  color: #333;
 }
 </style>
