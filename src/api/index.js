@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const http = require('http');
 const models = require('../../models');
 
 const router = express.Router();
@@ -16,6 +17,32 @@ router.use((req, res, next) => {
   next();
 });
 
+router.get('/', (req, res) => {
+  // 叩くパスをクエリパラメータから取得
+  const path = req.query.path;
+
+  const options = {
+    host: '104.155.222.216',
+    port: 5000,
+    path,
+    method: 'GET',
+  };
+  const httpReq = http.request(options, (httpRes) => {
+    httpRes.setEncoding('utf8');
+    httpRes.on('data', (chunk) => {
+      res.send(chunk);
+    });
+  });
+  httpReq.on('error', (e) => {
+    console.log('problem with request: ', e.message);
+    res.send(e);
+  });
+
+  // write data to request body
+  httpReq.write('data\n');
+  httpReq.write('data\n');
+  httpReq.end();
+});
 
 /**
  * アップロードされた画像を1件取得。
