@@ -3,7 +3,7 @@
     <h2><img src="../../assets/title/list.png" width="193" height="20" alt="最近聴かれた名場面"></h2>
     <ul>
       <li v-for="img in imgs" :key="img.id">
-        <router-link :to="{name: 'Player', params: {id: img.id}}"><img :src="img.filename" :alt="img.filename"></router-link>
+        <router-link :to="{name: 'Player', params: {id: img.id}}"><img :src="img.url" :alt="img.url"></router-link>
       </li>
     </ul>
   </div>
@@ -54,7 +54,8 @@ ul {
   box-shadow: 0px 10px 10px 0px rgba(4,0,0,0.2);
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
-  overflow: hidden;
+  overflow: auto;
+  white-space: nowrap;
 }
 
 li {
@@ -62,10 +63,10 @@ li {
   margin: 40px 20px 30px;
   width: 200px;
   height: 200px;
+  overflow: hidden;
 }
 
 li img {
-  width: 200px;
   height: 200px;
 }
 </style>

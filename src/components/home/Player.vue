@@ -1,30 +1,22 @@
 <template>
   <div class="player">
-    <div v-if="canPlay && stateCreated === 'todo'">
+    <div v-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" id="play">再生する</a>
-      <br>{{ $route.params.id }}
+      <a href="#" id="movePlay">再生する</a>
       <br><button @click="play">再生する</button>
     </div>
-    <div v-else-if="canPlay">
+    <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
-        <a href="/"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
+        <router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link>
         <ul id="frame-playlist">
-          <li>
-            <img src="../../assets/dummy/1.jpg">
-          </li>
-          <li>
-            <img src="../../assets/dummy/2.jpg">
-          </li>
-          <li>
-            <img src="../../assets/dummy/3.jpg">
+          <li v-for="(frame, index) in viewableFrames" :key="index">
+            <img :src="frame" :alt="frame" style="width:200px;height:200px;">
           </li>
         </ul>
         <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
       </div>
-      <br>{{ $route.params.id }}
     </div>
     <div v-else>
     <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
@@ -80,18 +72,23 @@
       </svg>
       <p><img src="../../assets/txt/in-progress.png" width="152" height="14" alt="漫画を準備しています"></p>
       <p>※最大で3分かかります</p>
-      <br>{{ $route.params.id }}
     </div>
   </div>
 </template>
 
 <script>
+import path from 'path';
+
 export default {
   name: 'player',
   data() {
     return {
       // 初期化時の状態（これによって、コンプリート画面への遷移の有無が決まる）
       stateCreated: null,
+      // 現在発声中のコマ
+      currFrame: null,
+      // 現在発声中のvoiceのindex
+      currVoiceIndex: null,
     };
   },
   computed: {
@@ -100,12 +97,33 @@ export default {
     },
     canPlay() {
       if (this.img && typeof this.img !== 'undefined') {
-        return (this.img.status === 'done');
+        return (this.img.status === 'DONE');
       }
       return false;
     },
     processedImgs() {
       return this.$store.state.processedImgs;
+    },
+    voices() {
+      return this.$store.state.voices;
+    },
+    // 現在表示中のビュー
+    currentView() {
+      if (this.canPlay && this.stateCreated === 'TODO') {
+        return 'complete';
+      } else if (this.canPlay) {
+        return 'play';
+      }
+      return 'processing';
+    },
+    // 現在表示中の3コマ
+    viewableFrames() {
+      const imgs = this.processedImgs;
+      const frames = [];
+      frames.push((this.currFrame - 1 >= 0) ? imgs[this.currFrame - 1] : 'start.jpg');
+      frames.push(imgs[this.currFrame]);
+      frames.push((this.currFrame + 1 < imgs.length) ? imgs[this.currFrame + 1] : 'end.jpg');
+      return frames;
     },
   },
   methods: {
@@ -122,13 +140,52 @@ export default {
     /**
      * 再生画面に遷移する
      */
-    play() {
-      console.log('play!');
+    movePlay() {
       this.stateCreated = 'done'; // これをtodoでなくせば再生画面に遷移する
+    },
+    playRoop() {
+      if (this.currFrame < this.processedImgs.length - 1) {
+        this.currVoiceIndex += 1;
+        if (this.currFrame >= 0) {
+          const url = new URL(this.voices[this.currVoiceIndex]);
+          const filename = path.basename(url, path.extname(url));
+          const currVoiceFrame = filename.split('-')[0];
+          if (currVoiceFrame - 1 !== this.currFrame) {
+            this.currFrame += 1;
+          }
+        } else {
+          this.currFrame += 1;
+        }
+        const audio = new Audio(this.voices[this.currVoiceIndex]);
+        audio.play();
+        audio.addEventListener('ended', () => {
+          this.playRoop();
+        });
+        this.$store.commit('setAudio', audio);
+      }
+    },
+    /**
+     * 再生関数
+     */
+    play() {
+      const imgPromise = this.$store.dispatch('getProcessedImgs', {
+        id: this.$route.params.id,
+      });
+      const voicePromise = this.$store.dispatch('getVoices', {
+        id: this.$route.params.id,
+      });
+      Promise.all([imgPromise, voicePromise]).then(() => {
+        this.currFrame = -1; // 1コマ目なら、この値は0になる（配列のインデックスなので）
+        this.currVoiceIndex = -1; // 1つ目なら、この値は0になる（配列のインデックスなので）
+        this.playRoop();
+      });
     },
   },
   // player外から遷移する時に呼ばれる
   created() {
+    if (this.currentView === 'play') {
+      this.play();
+    }
     const img = this.$store.getters.getImgById(this.$route.params.id);
     this.stateCreated = img ? img.status : 'undefined';
     this.checkCanPlay();
@@ -141,6 +198,13 @@ export default {
     // 監視
     this.checkCanPlay();
     next();
+  },
+  watch: {
+    currentView(newView) {
+      if (newView === 'play') {
+        this.play();
+      }
+    },
   },
 };
 </script>
@@ -203,13 +267,13 @@ export default {
 
 .icn-book{
   fill-opacity: 0;
-  -webkit-animation: anim01 5s 2s ease 1;
-          animation: anim01 5s 2s ease 1;
+  -webkit-animation: book-display 5s 1s ease 1;
+          animation: book-display 5s 1s ease 1;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
 }
 
-  @-webkit-keyframes anim01 {
+  @-webkit-keyframes book-display {
     0% {
       fill-opacity: 0;
     }
@@ -219,10 +283,14 @@ export default {
   }
 
 .icn-arrow{
-  -webkit-animation: arrow-display 1s 3s ease 1;
-          animation: arrow-display 1s 3s ease 1;
+  stroke: #333;
+  fill-opacity: 0;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
   -webkit-animation: arrow-jump 1.5s 1s ease infinite;
           animation: arrow-jump 1.5s 1s ease infinite;
+  -webkit-animation: arrow-display 2s 1.5s ease 1;
+          animation: arrow-display 2s 1.5s ease 1;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
 }
@@ -282,7 +350,7 @@ export default {
 -- */
 
 .icn-ballon {
-  stroke: #000;
+  stroke: #333;
   stroke-width: .6;
   fill-opacity: 0;
   stroke-dasharray: 2000;

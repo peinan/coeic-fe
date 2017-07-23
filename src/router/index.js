@@ -3,10 +3,11 @@ import Router from 'vue-router';
 import Upload from '@/components/home/Upload';
 import Player from '@/components/home/Player';
 import NotFound from '@/components/error/NotFound';
+import store from '../store';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -25,3 +26,11 @@ export default new Router({
     },
   ],
 });
+
+// 遷移前に必ず実行
+router.beforeEach((to, from, next) => {
+  store.commit('pauseAudio');
+  next();
+});
+
+export default router;
