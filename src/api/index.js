@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const http = require('http');
+// const http = require('http');
+const request = require('request');
 const models = require('../../models');
 
 const router = express.Router();
@@ -17,31 +18,22 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get('/', (req, res) => {
-  // 叩くパスをクエリパラメータから取得
-  const path = req.query.path;
+/**
+ * GCP側のAPIを叩く（クロスドメイン対策）
+ */
+router.all('/', (req, res) => {
+  const query = req.query;
+  const body = req.body;
 
-  const options = {
-    host: '104.155.222.216',
-    port: 5000,
-    path,
-    method: 'GET',
-  };
-  const httpReq = http.request(options, (httpRes) => {
-    httpRes.setEncoding('utf8');
-    httpRes.on('data', (chunk) => {
-      res.send(chunk);
-    });
+  request({
+    method: req.method,
+    uri: `http://104.155.222.216:5000${query.path}`,
+    headers: { 'Content-Type': 'application/json' },
+    qs: query,
+    form: body,
+  }, (error, response, resBody) => {
+    res.send(resBody);
   });
-  httpReq.on('error', (e) => {
-    console.log('problem with request: ', e.message);
-    res.send(e);
-  });
-
-  // write data to request body
-  httpReq.write('data\n');
-  httpReq.write('data\n');
-  httpReq.end();
 });
 
 /**
