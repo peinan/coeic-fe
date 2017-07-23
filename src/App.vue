@@ -29,6 +29,10 @@ a:hover {
 	opacity: 0.8;
 	filter: alpha(opacity=80);
 	-ms-filter: "alpha( opacity=80 )";
+  transition: opacity .5s ease-out;
+  -moz-transition: opacity .5s ease-out;
+  -webkit-transition: opacity .5s ease-out;
+  -o-transition: opacity .5s ease-out;
 }
 
 body {
