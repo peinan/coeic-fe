@@ -3,6 +3,7 @@
     <div v-if="canPlay && stateCreated === 'todo'">
       再生の準備ができました！
       <br>{{ $route.params.id }}
+      <br><button @click="play">再生する</button>
     </div>
     <div v-else-if="canPlay">
       ここは再生画面！
@@ -45,6 +46,13 @@ export default {
       if (!this.canPlay && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
       }
+    },
+    /**
+     * 再生画面に遷移する
+     */
+    play() {
+      console.log('play!');
+      this.stateCreated = 'done'; // これをtodoでなくせば再生画面に遷移する
     },
   },
   // player外から遷移する時に呼ばれる
