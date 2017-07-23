@@ -12,7 +12,8 @@
         <router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link>
         <ul id="frame-playlist">
           <li v-for="(frame, index) in viewableFrames" :key="index">
-            <img :src="frame" :alt="frame" style="width:200px;height:200px;">
+            <img v-if="frame !== 'opacity'" :src="frame" :alt="frame" :style="{ width: widths[index] + 'px' }">
+            <img v-else src="../../assets/dummy/opacity.png">
           </li>
         </ul>
         <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
@@ -77,6 +78,8 @@
 </template>
 
 <script>
+import path from 'path';
+
 export default {
   name: 'player',
   data() {
@@ -85,6 +88,10 @@ export default {
       stateCreated: null,
       // 現在発声中のコマ
       currFrame: null,
+      // 現在発声中のvoiceのindex
+      currVoiceIndex: null,
+      // 再生画面の画像の幅
+      widths: ['160px', '500px', '160px'],
     };
   },
   computed: {
@@ -116,9 +123,9 @@ export default {
     viewableFrames() {
       const imgs = this.processedImgs;
       const frames = [];
-      frames.push((this.currFrame - 1 >= 0) ? imgs[this.currFrame - 1] : 'start.jpg');
+      frames.push((this.currFrame - 1 >= 0) ? imgs[this.currFrame - 1] : 'opacity');
       frames.push(imgs[this.currFrame]);
-      frames.push((this.currFrame + 1 < imgs.length) ? imgs[this.currFrame + 1] : 'end.jpg');
+      frames.push((this.currFrame + 1 < imgs.length) ? imgs[this.currFrame + 1] : 'opacity');
       return frames;
     },
   },
@@ -141,12 +148,23 @@ export default {
     },
     playRoop() {
       if (this.currFrame < this.processedImgs.length - 1) {
-        this.currFrame += 1;
-        const audio = new Audio('http://www.ne.jp/asahi/music/myuu/wave/dog1.wav');
+        this.currVoiceIndex += 1;
+        if (this.currFrame >= 0) {
+          const url = new URL(this.voices[this.currVoiceIndex]);
+          const filename = path.basename(url, path.extname(url));
+          const currVoiceFrame = filename.split('-')[0];
+          if (currVoiceFrame - 1 !== this.currFrame) {
+            this.currFrame += 1;
+          }
+        } else {
+          this.currFrame += 1;
+        }
+        const audio = new Audio(this.voices[this.currVoiceIndex]);
         audio.play();
         audio.addEventListener('ended', () => {
           this.playRoop();
         });
+        this.$store.commit('setAudio', audio);
       }
     },
     /**
@@ -161,6 +179,7 @@ export default {
       });
       Promise.all([imgPromise, voicePromise]).then(() => {
         this.currFrame = -1; // 1コマ目なら、この値は0になる（配列のインデックスなので）
+        this.currVoiceIndex = -1; // 1つ目なら、この値は0になる（配列のインデックスなので）
         this.playRoop();
       });
     },
