@@ -1,6 +1,11 @@
 <template>
   <div class="player">
-    <div v-if="currentView === 'complete'">
+    <div v-if="currentView === 'error'">
+      <p>エラーが発生しました。</p>
+      <p>ご迷惑をおかけし、大変申し訳ございません。</p>
+      <a href="javascript:void(0);" @click="errorBack">戻る</a>
+    </div>
+    <div v-else-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
       <a href="javascript:void(0);" @click="movePlay">再生する</a>
@@ -91,6 +96,8 @@ export default {
       currVoiceIndex: null,
       // 再生画面の画像の幅
       widths: ['160px', '500px', '160px'],
+      // error発生時にtrue
+      hasError: false,
     };
   },
   computed: {
@@ -111,7 +118,9 @@ export default {
     },
     // 現在表示中のビュー
     currentView() {
-      if (this.canPlay && this.stateCreated === 'TODO') {
+      if (this.hasError) {
+        return 'error';
+      } else if (this.canPlay && this.stateCreated === 'TODO') {
         return 'complete';
       } else if (this.canPlay) {
         return 'play';
@@ -177,6 +186,11 @@ export default {
         id: this.$route.params.id,
       });
       Promise.all([imgPromise, voicePromise]).then(() => {
+        if (typeof this.$store.state.voices.length === 'undefined') {
+          // 音声ファイルが存在しない場合は処理しない。
+          this.hasError = true;
+          return;
+        }
         this.currFrame = -1; // 1コマ目なら、この値は0になる（配列のインデックスなので）
         this.currVoiceIndex = -1; // 1つ目なら、この値は0になる（配列のインデックスなので）
         this.playRoop();
@@ -187,6 +201,13 @@ export default {
      */
     historyBack() {
       this.$router.go(-1);
+    },
+    /**
+     * 1つ前の画面に戻る
+     */
+    errorBack() {
+      this.$router.push({ name: 'Upload' });
+      this.hasError = false;
     },
   },
   // player外から遷移する時に呼ばれる
@@ -202,6 +223,8 @@ export default {
   },
   // player内で遷移する時に呼ばれる
   beforeRouteUpdate(to, from, next) {
+    this.hasError = false;
+
     // 初期状態更新
     const img = this.$store.getters.getImgById(to.params.id);
     this.stateCreated = img ? img.status : 'TODO';
