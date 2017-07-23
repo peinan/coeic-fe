@@ -1,25 +1,19 @@
 <template>
   <div class="player">
-    <div v-if="canPlay && stateCreated === 'todo'">
+    <div v-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" id="play">再生する</a>
+      <a href="#" id="movePlay">再生する</a>
       <br>{{ $route.params.id }}
       <br><button @click="play">再生する</button>
     </div>
-    <div v-else-if="canPlay">
+    <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
         <a href="/"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
-          <li>
-            <img src="../../assets/dummy/1.jpg">
-          </li>
-          <li>
-            <img src="../../assets/dummy/2.jpg">
-          </li>
-          <li>
-            <img src="../../assets/dummy/3.jpg">
+          <li v-for="(frame, index) in viewableFrames" :key="index">
+            <img :src="frame" :alt="frame" style="width:200px;height:200px;">
           </li>
         </ul>
         <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
@@ -92,6 +86,8 @@ export default {
     return {
       // 初期化時の状態（これによって、コンプリート画面への遷移の有無が決まる）
       stateCreated: null,
+      // 現在発声中のコマ
+      currFrame: null,
     };
   },
   computed: {
@@ -106,6 +102,27 @@ export default {
     },
     processedImgs() {
       return this.$store.state.processedImgs;
+    },
+    voices() {
+      return this.$store.state.voices;
+    },
+    // 現在表示中のビュー
+    currentView() {
+      if (this.canPlay && this.stateCreated === 'todo') {
+        return 'complete';
+      } else if (this.canPlay) {
+        return 'play';
+      }
+      return 'processing';
+    },
+    // 現在表示中の3コマ
+    viewableFrames() {
+      const imgs = this.processedImgs;
+      const frames = [];
+      frames.push((this.currFrame - 1 >= 0) ? imgs[this.currFrame - 1] : 'start.jpg');
+      frames.push(imgs[this.currFrame]);
+      frames.push((this.currFrame + 1 < imgs.length) ? imgs[this.currFrame + 1] : 'end.jpg');
+      return frames;
     },
   },
   methods: {
@@ -122,13 +139,40 @@ export default {
     /**
      * 再生画面に遷移する
      */
-    play() {
-      console.log('play!');
+    movePlay() {
       this.stateCreated = 'done'; // これをtodoでなくせば再生画面に遷移する
+    },
+    playRoop() {
+      if (this.currFrame < this.processedImgs.length - 1) {
+        this.currFrame += 1;
+        const audio = new Audio('http://www.ne.jp/asahi/music/myuu/wave/dog1.wav');
+        audio.play();
+        audio.addEventListener('ended', () => {
+          this.playRoop();
+        });
+      }
+    },
+    /**
+     * 再生関数
+     */
+    play() {
+      const imgPromise = this.$store.dispatch('getProcessedImgs', {
+        id: this.$route.params.id,
+      });
+      const voicePromise = this.$store.dispatch('getVoices', {
+        id: this.$route.params.id,
+      });
+      Promise.all([imgPromise, voicePromise]).then(() => {
+        this.currFrame = -1; // 1コマ目なら、この値は0になる（配列のインデックスなので）
+        this.playRoop();
+      });
     },
   },
   // player外から遷移する時に呼ばれる
   created() {
+    if (this.currentView === 'play') {
+      this.play();
+    }
     const img = this.$store.getters.getImgById(this.$route.params.id);
     this.stateCreated = img ? img.status : 'undefined';
     this.checkCanPlay();
@@ -141,6 +185,13 @@ export default {
     // 監視
     this.checkCanPlay();
     next();
+  },
+  watch: {
+    currentView(newView) {
+      if (newView === 'play') {
+        this.play();
+      }
+    },
   },
 };
 </script>

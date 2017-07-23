@@ -40,14 +40,14 @@ router.all('/', upload.single('file'), (req, res) => {
  */
 router.get('/uploaded-img/:id', (req, res) => {
   models.uploaded_img.findById(req.params.id)
-  .then(uploadedImg => res.send(uploadedImg));
+  .then(uploadedImg => res.send({ result: uploadedImg }));
 });
 
 /**
  * アップロードされた画像を全件取得。
  */
 router.get('/uploaded-img', (req, res) => {
-  models.uploaded_img.findAll().then(uploadedImg => res.send(uploadedImg));
+  models.uploaded_img.findAll().then(uploadedImg => res.send({ result: uploadedImg }));
 });
 
 /**
@@ -84,6 +84,17 @@ router.put('/uploaded-img/:id', (req, res) => {
   .then((result) => {
     console.log(result);
     res.send(result);
+  });
+});
+
+/**
+ * 処理済画像を取得。（モック）
+ */
+router.get('/processed-img/:id', (req, res) => {
+  res.send({
+    result: {
+      aaa: 'bbb',
+    },
   });
 });
 
