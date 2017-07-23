@@ -93,7 +93,7 @@ export default {
     },
     canPlay() {
       if (this.img && typeof this.img !== 'undefined') {
-        return (this.img.status === 'done');
+        return (this.img.status === 'DONE');
       }
       return false;
     },
@@ -105,7 +105,7 @@ export default {
     },
     // 現在表示中のビュー
     currentView() {
-      if (this.canPlay && this.stateCreated === 'todo') {
+      if (this.canPlay && this.stateCreated === 'TODO') {
         return 'complete';
       } else if (this.canPlay) {
         return 'play';
