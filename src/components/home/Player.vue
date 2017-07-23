@@ -6,7 +6,7 @@
       <a href="javascript:void(0);" @click="movePlay">再生する</a>
     </div>
     <div v-else-if="currentView === 'play'">
-      <div id="black-overlay"></div>
+      <div id="black-overlay" @click="historyBack"></div>
       <div id="frame-playlist-base">
         <a href="javascript:void(0);" @click="historyBack"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
