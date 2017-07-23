@@ -1,6 +1,6 @@
 <template>
   <div class="view">
-      <div id="black-overlay"></div>
+      <div id="black-overlay" @click="historyBack"></div>
       <div id="about-base">
         <img src="../../assets/txt/about.png" width="361" height="344" alt="coeicとは、とは、漫画に楽しみを
 プラスするサービスです。音声の読み上げ機能を搭載しており、今後、次のような機能を実装予定です。感情や場面に応じた音声の生成、話者の性別等による音声の分別、音声による操作（アップロードなど）対応">
