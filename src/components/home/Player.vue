@@ -7,8 +7,20 @@
       <br>{{ $route.params.id }}
     </div>
     <div v-else-if="canPlay">
-      <ul id="frame-playlist">
-      </ul>
+      <div id="black-overlay"></div>
+      <div id="frame-playlist-base">
+        <ul id="frame-playlist">
+          <li>
+            <img src="../../assets/dummy/1.jpg">
+          </li>
+          <li>
+            <img src="../../assets/dummy/2.jpg">
+          </li>
+          <li>
+            <img src="../../assets/dummy/3.jpg">
+          </li>
+        </ul>
+      </div>
       <br>{{ $route.params.id }}
     </div>
     <div v-else>
@@ -114,6 +126,17 @@ export default {
   font-size: 14px;
 }
 
+#frame-playlist-base {
+  position: absolute;
+  top: 40px;
+  width: 950px;
+  margin: 0 auto;
+  background: url('../../assets/bg/main-base.png') no-repeat center center;
+  background-size: cover;
+  padding: 40px 10px;
+  z-index: 4;
+}
+
 #frame-playlist {
   display: -webkit-flex;
   display: flex;
@@ -122,33 +145,18 @@ export default {
   align-items: center;
 }
 
+#frame-playlist li:first-child {
 
-st1{
-  fill:#0060e6;
-  stroke:#0060e6;
-  stroke-dasharray: 2000;
-  stroke-dashoffset: 0;
-  stroke-width: 1;
-  -webkit-animation: hello 4s ease-in 0s;
-  animation: hello 4s ease-in 0s;
 }
 
-  @-webkit-keyframes hello {
-      0% {
-        stroke-dashoffset: 2000;
-        fill:transparent;
-      }
-      40% {
-        stroke-dashoffset: 2000;
-        fill:transparent;
-      }
-      50% {
-        fill:transparent;
-      }
-      100% {
-        stroke-dashoffset: 0;
-        fill:#0060e6;
-      }
-    }
+#black-overlay { 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8); 
+  z-index: 3;
+}
 
 </style>
