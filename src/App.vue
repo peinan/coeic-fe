@@ -38,7 +38,7 @@ a:hover {
 body {
   color: #333333;
   font-size: 12px;
-  background: url('./assets/bg/bg.jpg') no-repeat;
+  background: url('./assets/bg/bg-light.jpg') no-repeat;
   background-size: cover;
   margin: 0 0 40px;
 }
