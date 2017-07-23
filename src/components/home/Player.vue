@@ -189,6 +189,8 @@ export default {
     if (this.currentView === 'play') {
       this.play();
     }
+
+    this.$store.dispatch('getImgs');
     const img = this.$store.getters.getImgById(this.$route.params.id);
     this.stateCreated = img ? img.status : 'undefined';
     this.checkCanPlay();
@@ -199,6 +201,7 @@ export default {
     const img = this.$store.getters.getImgById(to.params.id);
     this.stateCreated = img ? img.status : 'undefined';
     // 監視
+    console.log('beforeRouteUpdate');
     this.checkCanPlay();
     next();
   },
