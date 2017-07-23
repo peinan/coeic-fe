@@ -3,6 +3,7 @@ const path = require('path');
 const serveStatic = require('serve-static');
 const basicAuth = require('basic-auth-connect');
 const rangeCheck = require('range_check');
+const https = require('https');
 const api = require('./src/api');
 const config = require('./config');
 
@@ -42,6 +43,11 @@ if (process.env.NODE_ENV === 'production') {
 app.use('/api', api);
 // static file routing
 app.use(serveStatic(path.join(__dirname, 'dist')));
+
+// https -> http へリダイレクト
+https.createServer((express()).all('*', (request, response) => {
+  response.redirect(`http://${request.hostname}${request.url}`);
+})).listen(443);
 
 app.listen(port);
 console.log(`server started ${port}`);
