@@ -3,13 +3,12 @@
     <div v-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" id="movePlay">再生する</a>
-      <br><button @click="play">再生する</button>
+      <a href="javascript:void(0);" @click="movePlay">再生する</a>
     </div>
     <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
-        <router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link>
+        <a href="javascript:void(0);" @click="historyBack"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
           <li v-for="(frame, index) in viewableFrames" :key="index">
             <img v-if="frame !== 'opacity'" :src="frame" :alt="frame" :style="{ width: widths[index] + 'px' }">
@@ -183,21 +182,29 @@ export default {
         this.playRoop();
       });
     },
+    /**
+     * 1つ前の画面に戻る
+     */
+    historyBack() {
+      this.$router.go(-1);
+    },
   },
   // player外から遷移する時に呼ばれる
   created() {
     if (this.currentView === 'play') {
       this.play();
     }
+
+    this.$store.dispatch('getImgs');
     const img = this.$store.getters.getImgById(this.$route.params.id);
-    this.stateCreated = img ? img.status : 'undefined';
+    this.stateCreated = img ? img.status : 'TODO';
     this.checkCanPlay();
   },
   // player内で遷移する時に呼ばれる
   beforeRouteUpdate(to, from, next) {
     // 初期状態更新
     const img = this.$store.getters.getImgById(to.params.id);
-    this.stateCreated = img ? img.status : 'undefined';
+    this.stateCreated = img ? img.status : 'TODO';
     // 監視
     this.checkCanPlay();
     next();

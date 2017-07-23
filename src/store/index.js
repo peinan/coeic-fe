@@ -24,8 +24,9 @@ export default new Vuex.Store({
     },
     // 画像の更新
     setImg(state, img) {
-      if (state.imgs.find(img2 => img2.id === img.id)) {
-        state.imgs.splice(img.id - 1, 1, img);
+      const index = state.imgs.findIndex(img2 => img2.id.toString() === img.id.toString());
+      if (index !== -1) {
+        state.imgs.splice(index, 1, img);
       }
     },
     // 処理済画像の更新
@@ -50,7 +51,7 @@ export default new Vuex.Store({
   getters: {
     getImgById: state => (id) => {
       if (Object.keys(state.imgs).length === 0) return null;
-      return state.imgs.find(img => img.id === id);
+      return state.imgs.find(img => img.id.toString() === id.toString());
     },
   },
   actions: {
