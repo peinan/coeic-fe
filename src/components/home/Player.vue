@@ -4,7 +4,6 @@
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
       <a href="#" id="movePlay">再生する</a>
-      <br>{{ $route.params.id }}
       <br><button @click="play">再生する</button>
     </div>
     <div v-else-if="currentView === 'play'">
@@ -18,7 +17,6 @@
         </ul>
         <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
       </div>
-      <br>{{ $route.params.id }}
     </div>
     <div v-else>
     <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
@@ -74,7 +72,6 @@
       </svg>
       <p><img src="../../assets/txt/in-progress.png" width="152" height="14" alt="漫画を準備しています"></p>
       <p>※最大で3分かかります</p>
-      <br>{{ $route.params.id }}
     </div>
   </div>
 </template>
@@ -254,13 +251,13 @@ export default {
 
 .icn-book{
   fill-opacity: 0;
-  -webkit-animation: anim01 5s 2s ease 1;
-          animation: anim01 5s 2s ease 1;
+  -webkit-animation: book-display 5s 1s ease 1;
+          animation: book-display 5s 1s ease 1;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
 }
 
-  @-webkit-keyframes anim01 {
+  @-webkit-keyframes book-display {
     0% {
       fill-opacity: 0;
     }
@@ -270,10 +267,14 @@ export default {
   }
 
 .icn-arrow{
-  -webkit-animation: arrow-display 1s 3s ease 1;
-          animation: arrow-display 1s 3s ease 1;
+  stroke: #333;
+  fill-opacity: 0;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
   -webkit-animation: arrow-jump 1.5s 1s ease infinite;
           animation: arrow-jump 1.5s 1s ease infinite;
+  -webkit-animation: arrow-display 2s 1.5s ease 1;
+          animation: arrow-display 2s 1.5s ease 1;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
 }
@@ -333,7 +334,7 @@ export default {
 -- */
 
 .icn-ballon {
-  stroke: #000;
+  stroke: #333;
   stroke-width: .6;
   fill-opacity: 0;
   stroke-dasharray: 2000;
