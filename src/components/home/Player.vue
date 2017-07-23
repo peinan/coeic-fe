@@ -10,6 +10,7 @@
     <div v-else-if="canPlay">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
+        <a href="#"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
           <li>
             <img src="../../assets/dummy/1.jpg">
@@ -21,6 +22,7 @@
             <img src="../../assets/dummy/3.jpg">
           </li>
         </ul>
+        <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
       </div>
       <br>{{ $route.params.id }}
     </div>
@@ -141,7 +143,7 @@ export default {
   margin: 0 auto;
   background: url('../../assets/bg/main-base.png') no-repeat center center;
   background-size: cover;
-  padding: 40px 10px;
+  padding: 30px 10px 40px;
   z-index: 4;
 }
 
@@ -151,10 +153,18 @@ export default {
   -webkit-justify-content: space-around;
   justify-content: space-around;
   align-items: center;
+  margin: 40px auto;
+  list-style-type: none;
 }
 
-#frame-playlist li:first-child {
+#frame-playlist li:first-child img, #frame-playlist li:nth-child(3) img { /* カレントじゃないコマ */
+  max-width: 160px;
+  height: auto;
+}
 
+#frame-playlist li:nth-child(2) img { /* カレントのコマ */
+  max-width: 500px;
+  height: auto;
 }
 
 #black-overlay { 
