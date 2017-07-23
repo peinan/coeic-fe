@@ -2,7 +2,7 @@
   <div class="upload">
     <dropzone
       id="dropzone"
-      :url="url"
+      url="http://104.155.222.216:5000/api/uploadedImg"
       acceptedFileTypes="image/*"
       :maxFileSizeInMB="100"
       :preview-template="template"
@@ -63,7 +63,7 @@ export default {
     toPlayer(file) {
       this.$router.push({
         name: 'Player',
-        params: { id: JSON.parse(file.xhr.response).id },
+        params: { id: JSON.parse(file.xhr.response).result.id },
       });
     },
   },
