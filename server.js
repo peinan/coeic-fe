@@ -13,26 +13,28 @@ const app = express();
 
 /** *************************** アクセス制限ここから *****************************/
 // 環境変数によって利用する認証方法を切り替え
-if (process.env.AUTH === 'IP') {
-  // 社内ipのみアクセス許可
-  app.use((req, res, next) => {
-    const yahooIps = [
-      '211.14.8.0/24',
-      '211.14.26.0/23',
-      '211.14.28.0/23',
-      '203.141.54.0/24',
-      '103.2.244.0/22',
-    ];
-    const ip = req.headers['x-forwarded-for'] || req.ip;
-    if (rangeCheck.inRange(ip, yahooIps)) {
-      next();
-    } else {
-      res.status(403).send('403 Forbidden.');
-    }
-  });
-} else {
-  // basic認証
-  app.use(basicAuth('coeic', 'hackday14'));
+if (process.env.NODE_ENV === 'production') {
+  if (process.env.AUTH === 'IP') {
+    // 社内ipのみアクセス許可
+    app.use((req, res, next) => {
+      const yahooIps = [
+        '211.14.8.0/24',
+        '211.14.26.0/23',
+        '211.14.28.0/23',
+        '203.141.54.0/24',
+        '103.2.244.0/22',
+      ];
+      const ip = req.headers['x-forwarded-for'] || req.ip;
+      if (rangeCheck.inRange(ip, yahooIps)) {
+        next();
+      } else {
+        res.status(403).send('403 Forbidden.');
+      }
+    });
+  } else {
+    // basic認証
+    app.use(basicAuth('coeic', 'hackday14'));
+  }
 }
 /** *************************** アクセス制限ここまで *****************************/
 

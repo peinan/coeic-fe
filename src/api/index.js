@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+// const http = require('http');
+const request = require('request');
 const models = require('../../models');
 
 const router = express.Router();
@@ -14,6 +16,32 @@ router.use(bodyParser.json());
 router.use((req, res, next) => {
   console.log('Time: ', Date.now());
   next();
+});
+
+/**
+ * GCP側のAPIを叩く（クロスドメイン対策）
+ */
+router.all('/', (req, res) => {
+  const query = req.query;
+  const body = req.body;
+
+  request({
+    method: req.method,
+    uri: `http://104.155.222.216:5000${query.path}`,
+    headers: { 'Content-Type': 'application/json' },
+    qs: query,
+    form: body,
+  }, (error, response, resBody) => {
+    res.send(resBody);
+  });
+});
+
+/**
+ * アップロードされた画像を1件取得。
+ */
+router.get('/uploaded-img/:id', (req, res) => {
+  models.uploaded_img.findById(req.params.id)
+  .then(uploadedImg => res.send(uploadedImg));
 });
 
 /**
@@ -44,6 +72,19 @@ router.post('/uploaded-img', (req, res) => {
   })
   .spread((uploadedImg) => {
     res.send(uploadedImg.get({ plain: true }));
+  });
+});
+
+/**
+ * 画像の更新
+ */
+router.put('/uploaded-img/:id', (req, res) => {
+  models.uploaded_img.update({ status: 'done' }, {
+    where: { id: req.params.id },
+  })
+  .then((result) => {
+    console.log(result);
+    res.send(result);
   });
 });
 
