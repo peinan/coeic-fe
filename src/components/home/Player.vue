@@ -3,8 +3,7 @@
     <div v-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" id="movePlay">再生する</a>
-      <br><button @click="play">再生する</button>
+      <a href="#" @click="movePlay">再生する</a>
     </div>
     <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
@@ -192,16 +191,15 @@ export default {
 
     this.$store.dispatch('getImgs');
     const img = this.$store.getters.getImgById(this.$route.params.id);
-    this.stateCreated = img ? img.status : 'undefined';
+    this.stateCreated = img ? img.status : 'TODO';
     this.checkCanPlay();
   },
   // player内で遷移する時に呼ばれる
   beforeRouteUpdate(to, from, next) {
     // 初期状態更新
     const img = this.$store.getters.getImgById(to.params.id);
-    this.stateCreated = img ? img.status : 'undefined';
+    this.stateCreated = img ? img.status : 'TODO';
     // 監視
-    console.log('beforeRouteUpdate');
     this.checkCanPlay();
     next();
   },
