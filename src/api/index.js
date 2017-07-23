@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const http = require('http');
 const request = require('request');
+const multer = require('multer');
 const models = require('../../models');
 
 const router = express.Router();
+const upload = multer();
 
 // POSTパラメータをJSONで取得する設定
 router.use(bodyParser.urlencoded({
@@ -21,16 +22,14 @@ router.use((req, res, next) => {
 /**
  * GCP側のAPIを叩く（クロスドメイン対策）
  */
-router.all('/', (req, res) => {
+router.all('/', upload.single('file'), (req, res) => {
   const query = req.query;
-  const body = req.body;
 
   request({
     method: req.method,
     uri: `http://104.155.222.216:5000${query.path}`,
-    headers: { 'Content-Type': 'application/json' },
     qs: query,
-    form: body,
+    form: req.file,
   }, (error, response, resBody) => {
     res.send(resBody);
   });

@@ -10,6 +10,7 @@
     <div v-else-if="canPlay">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
+        <a href="/"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
           <li>
             <img src="../../assets/dummy/1.jpg">
@@ -21,15 +22,15 @@
             <img src="../../assets/dummy/3.jpg">
           </li>
         </ul>
+        <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
       </div>
       <br>{{ $route.params.id }}
     </div>
     <div v-else>
-
-      <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+    <svg version="1.1" id="レイヤー_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
          y="0px" width="87px" height="115px" viewBox="0 0 87 115" enable-background="new 0 0 87 115" xml:space="preserve">
       <g>
-        <g class="st1">
+        <g class="icn-book">
           <path fill="#333333" d="M42.601,82.849c-0.486,0.478-0.59,1.224-0.249,1.815c0.155,0.271,0.39,0.468,0.656,0.596l0.293-0.289
             c3.729-3.668,6.658-4.688,11.879-4.688s8.15,1.02,11.879,4.688l0.297,0.292c0.272-0.132,0.51-0.338,0.664-0.616
             c0.127-0.229,0.189-0.479,0.189-0.729c0-0.393-0.154-0.779-0.449-1.069c-3.916-3.853-7.095-4.976-12.58-4.976
@@ -55,30 +56,28 @@
             c-5.235,0-8.371,1.029-12.051,4.473c-3.681-3.443-5.816-4.473-11.052-4.473c-5.485,0-8.663,1.123-12.58,4.976
             c-0.486,0.478-0.59,1.224-0.249,1.815"/>
         </g>
-        <g class="st2">
-            <line fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="42.801" y1="48.762" x2="42.801" y2="63.762"/>
-          
-            <line fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="42.801" y1="48.762" x2="35.73" y2="55.833"/>
-          
-            <line fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="42.801" y1="48.762" x2="49.873" y2="55.833"/>
+        <g class="icn-arrow">
+            <line fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="42.801" y1="55.762" x2="42.801" y2="70.762"/>
+            <line fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="42.801" y1="55.762" x2="35.73" y2="62.833"/>
+            <line fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="42.801" y1="55.762" x2="49.873" y2="62.833"/>
         </g>
-        
+
+        <g class="icn-ballon">
           <path opacity="0.8" fill="none" stroke="#333333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
           M66.5,12c-10.355,0-18.75,6.713-18.75,15c0,3.246,1.301,6.241,3.489,8.695l-1.378,5.141l5.863-1.571
           C58.775,40.982,62.486,42,66.5,42c10.355,0,18.75-6.713,18.75-15S76.855,12,66.5,12z"/>
-        
           <path opacity="0.5" fill="none" stroke="#333333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
           M20.5,3c10.354,0,18.75,6.713,18.75,15c0,3.246-1.302,6.241-3.49,8.695l1.378,5.141l-5.863-1.571C28.225,31.982,24.514,33,20.5,33
           C10.145,33,1.75,26.287,1.75,18S10.145,3,20.5,3z"/>
-        <g class="st3">
+        </g>
+
+        <g class="icn-circle">
           <circle opacity="0.8" fill="#333333" cx="42.801" cy="42.75" r="1.25"/>
           <circle opacity="0.7" fill="#333333" cx="42.801" cy="37.75" r="1.25"/>
           <circle opacity="0.5" fill="#333333" cx="42.801" cy="32.75" r="1.25"/>
         </g>
       </g>
       </svg>
-
-      <p><img src="../../assets/icn/in-progress.svg" width="87" height="115" alt="処理中アイコン"></p>
       <p><img src="../../assets/txt/in-progress.png" width="152" height="14" alt="漫画を準備しています"></p>
       <p>※最大で3分かかります</p>
       <br>{{ $route.params.id }}
@@ -89,9 +88,24 @@
 <script>
 export default {
   name: 'player',
+  data() {
+    return {
+      // 初期化時の状態（これによって、コンプリート画面への遷移の有無が決まる）
+      stateCreated: null,
+    };
+  },
   computed: {
+    img() {
+      return this.$store.getters.getImgById(this.$route.params.id);
+    },
     canPlay() {
-      return (this.$store.state.status !== 'done');
+      if (this.img && typeof this.img !== 'undefined') {
+        return (this.img.status === 'done');
+      }
+      return false;
+    },
+    processedImgs() {
+      return this.$store.state.processedImgs;
     },
   },
   methods: {
@@ -99,9 +113,9 @@ export default {
      * statusがdoneになるまで1秒おきにstatusを確認する
      */
     checkCanPlay() {
-      this.$store.dispatch('getStatus', { id: this.$route.params.id });
-      console.log(this.$store.state.status);
-      if (!this.canPlay) {
+      this.$store.dispatch('getImg', { id: this.$route.params.id });
+      // ページ遷移しても動き続けてしまうので現在のrouteも確認する
+      if (!this.canPlay && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
       }
     },
@@ -113,8 +127,20 @@ export default {
       this.stateCreated = 'done'; // これをtodoでなくせば再生画面に遷移する
     },
   },
+  // player外から遷移する時に呼ばれる
   created() {
+    const img = this.$store.getters.getImgById(this.$route.params.id);
+    this.stateCreated = img ? img.status : 'undefined';
     this.checkCanPlay();
+  },
+  // player内で遷移する時に呼ばれる
+  beforeRouteUpdate(to, from, next) {
+    // 初期状態更新
+    const img = this.$store.getters.getImgById(to.params.id);
+    this.stateCreated = img ? img.status : 'undefined';
+    // 監視
+    this.checkCanPlay();
+    next();
   },
 };
 </script>
@@ -141,7 +167,7 @@ export default {
   margin: 0 auto;
   background: url('../../assets/bg/main-base.png') no-repeat center center;
   background-size: cover;
-  padding: 40px 10px;
+  padding: 30px 10px 40px;
   z-index: 4;
 }
 
@@ -151,20 +177,138 @@ export default {
   -webkit-justify-content: space-around;
   justify-content: space-around;
   align-items: center;
+  margin: 40px auto;
+  list-style-type: none;
 }
 
-#frame-playlist li:first-child {
-
+#frame-playlist li:first-child img, #frame-playlist li:nth-child(3) img { /* カレントじゃないコマ */
+  max-width: 160px;
+  height: auto;
 }
 
-#black-overlay { 
+#frame-playlist li:nth-child(2) img { /* カレントのコマ */
+  max-width: 500px;
+  height: auto;
+}
+
+#black-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.8); 
+  background: rgba(0,0,0,0.8);
   z-index: 3;
 }
 
+.icn-book{
+  fill-opacity: 0;
+  -webkit-animation: anim01 5s 2s ease 1;
+          animation: anim01 5s 2s ease 1;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+  @-webkit-keyframes anim01 {
+    0% {
+      fill-opacity: 0;
+    }
+    100% {
+      fill-opacity: 100;
+    }
+  }
+
+.icn-arrow{
+  -webkit-animation: arrow-display 1s 3s ease 1;
+          animation: arrow-display 1s 3s ease 1;
+  -webkit-animation: arrow-jump 1.5s 1s ease infinite;
+          animation: arrow-jump 1.5s 1s ease infinite;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+  @-webkit-keyframes arrow-display {
+    0% {
+      stroke-dashoffset: 2000;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @-webkit-keyframes arrow-jump {
+    15% {-webkit-transform: translateY(-30%);}
+    30% {-webkit-transform: translateY(0);}
+    100% {-webkit-transform: translateY(0);}
+  }
+
+.icn-circle {
+  fill-opacity: 0;
+}
+
+/* --
+.icn-circle circle:first-child{
+  -webkit-animation: circle-blink 0s 1s ease infinite;
+          animation: circle-blink 0s 1s ease infinite;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.icn-circle circle:nth-child(2){
+  -webkit-animation: circle-blink 1s 1s ease infinite;
+          animation: circle-blink 1s 1s ease infinite;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.icn-circle circle:nth-child(3){
+  -webkit-animation: circle-blink 2s 1s ease infinite;
+          animation: circle-blink 2s 1s ease infinite;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+  @-webkit-keyframes circle-blink {
+    0% {
+      fill-opacity: 0;
+    }
+    50% {
+      fill-opacity: 1;
+    }
+    100% {
+      fill-opacity: 0;
+    }
+  }
+-- */
+
+.icn-ballon {
+  stroke: #000;
+  stroke-width: .6;
+  fill-opacity: 0;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+}
+
+.icn-ballon path:first-child{
+  -webkit-animation: ballon-blink 4s 2s ease infinite;
+          animation: ballon-blink 4s 2s ease infinite;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.icn-ballon path:nth-child(2){
+  -webkit-animation: ballon-blink 4s 4s ease infinite;
+          animation: ballon-blink 4s 4s ease infinite;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+  @-webkit-keyframes ballon-blink {
+    0% {
+      stroke-dashoffset: 2000;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
 </style>
