@@ -3,12 +3,12 @@
     <div v-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" @click="movePlay">再生する</a>
+      <a href="javascript:void(0);" @click="movePlay">再生する</a>
     </div>
     <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
       <div id="frame-playlist-base">
-        <router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link>
+        <a href="javascript:void(0);" @click="historyBack"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
           <li v-for="(frame, index) in viewableFrames" :key="index">
             <img v-if="frame !== 'opacity'" :src="frame" :alt="frame" :style="{ width: widths[index] + 'px' }">
@@ -181,6 +181,12 @@ export default {
         this.currVoiceIndex = -1; // 1つ目なら、この値は0になる（配列のインデックスなので）
         this.playRoop();
       });
+    },
+    /**
+     * 1つ前の画面に戻る
+     */
+    historyBack() {
+      this.$router.go(-1);
     },
   },
   // player外から遷移する時に呼ばれる
