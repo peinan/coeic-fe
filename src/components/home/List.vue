@@ -54,7 +54,8 @@ ul {
   box-shadow: 0px 10px 10px 0px rgba(4,0,0,0.2);
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
-  overflow: hidden;
+  overflow: auto;
+  white-space: nowrap;
 }
 
 li {
@@ -62,10 +63,10 @@ li {
   margin: 40px 20px 30px;
   width: 200px;
   height: 200px;
+  overflow: hidden;
 }
 
 li img {
-  width: 200px;
   height: 200px;
 }
 </style>
