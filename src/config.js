@@ -8,7 +8,8 @@
 //   },
 // };
 
-const API_HOST = 'http://localhost:8080/api?path=';
+/* prod環境のAPI */
+const API_HOST = '/api?path=';
 module.exports = {
   API: {
     UPLOADED_IMG: `${API_HOST}/api/uploadedImg`,
