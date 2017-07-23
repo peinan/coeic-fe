@@ -5,6 +5,11 @@
       <p>ご迷惑をおかけし、大変申し訳ございません。</p>
       <a href="javascript:void(0);" @click="errorBack">戻る</a>
     </div>
+    <div v-if="currentView === 'failure'">
+      <p>正常に処理できませんでした。</p>
+      <p>ご迷惑をおかけし、大変申し訳ございません。</p>
+      <a href="javascript:void(0);" @click="errorBack">戻る</a>
+    </div>
     <div v-else-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
@@ -106,9 +111,9 @@ export default {
     },
     canPlay() {
       if (this.img && typeof this.img !== 'undefined') {
-        return (this.img.status === 'DONE');
+        return this.img.status;
       }
-      return false;
+      return 'TODO';
     },
     processedImgs() {
       return this.$store.state.processedImgs;
@@ -120,9 +125,11 @@ export default {
     currentView() {
       if (this.hasError) {
         return 'error';
-      } else if (this.canPlay && this.stateCreated === 'TODO') {
+      } else if (this.canPlay === 'FAILED') {
+        return 'failure';
+      } else if (this.canPlay === 'DONE' && ['TODO', 'DOING'].includes(this.stateCreated)) {
         return 'complete';
-      } else if (this.canPlay) {
+      } else if (this.canPlay === 'DONE') {
         return 'play';
       }
       return 'processing';
@@ -144,7 +151,7 @@ export default {
     checkCanPlay() {
       this.$store.dispatch('getImg', { id: this.$route.params.id });
       // ページ遷移しても動き続けてしまうので現在のrouteも確認する
-      if (!this.canPlay && this.$route.name === 'Player') {
+      if (['TODO', 'DOING'].includes(this.canPlay) && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
       }
     },
