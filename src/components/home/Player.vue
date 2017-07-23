@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import path from 'path';
+
 export default {
   name: 'player',
   data() {
@@ -85,6 +87,8 @@ export default {
       stateCreated: null,
       // 現在発声中のコマ
       currFrame: null,
+      // 現在発声中のvoiceのindex
+      currVoiceIndex: null,
     };
   },
   computed: {
@@ -141,12 +145,23 @@ export default {
     },
     playRoop() {
       if (this.currFrame < this.processedImgs.length - 1) {
-        this.currFrame += 1;
-        const audio = new Audio('http://www.ne.jp/asahi/music/myuu/wave/dog1.wav');
+        this.currVoiceIndex += 1;
+        if (this.currFrame >= 0) {
+          const url = new URL(this.voices[this.currVoiceIndex]);
+          const filename = path.basename(url, path.extname(url));
+          const currVoiceFrame = filename.split('-')[0];
+          if (currVoiceFrame - 1 !== this.currFrame) {
+            this.currFrame += 1;
+          }
+        } else {
+          this.currFrame += 1;
+        }
+        const audio = new Audio(this.voices[this.currVoiceIndex]);
         audio.play();
         audio.addEventListener('ended', () => {
           this.playRoop();
         });
+        this.$store.commit('setAudio', audio);
       }
     },
     /**
@@ -161,6 +176,7 @@ export default {
       });
       Promise.all([imgPromise, voicePromise]).then(() => {
         this.currFrame = -1; // 1コマ目なら、この値は0になる（配列のインデックスなので）
+        this.currVoiceIndex = -1; // 1つ目なら、この値は0になる（配列のインデックスなので）
         this.playRoop();
       });
     },
