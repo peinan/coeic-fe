@@ -2,7 +2,7 @@
   <div class="upload">
     <dropzone
       id="dropzone"
-      :url="url"
+      url="http://104.155.222.216:5000/api/uploadedImg"
       acceptedFileTypes="image/*"
       :maxFileSizeInMB="100"
       :preview-template="template"
@@ -13,7 +13,7 @@
       <p><img src="../../assets/icn/upload.png" width="49" height="55" alt="アップロードアイコン"></p>
       <p><img src="../../assets/txt/drag-drop.png" width="179" height="14" alt="漫画をドラッグ＆ドロップ"></p>
       <p>または</p>
-      <img src="../../assets/btn/file-select.png" width="140" height="40" alt="ファイルを選択">
+      <p><img src="../../assets/btn/file-select.png" width="140" height="40" alt="ファイルを選択"></p>
     </div>
   </div>
 </template>
@@ -63,7 +63,7 @@ export default {
     toPlayer(file) {
       this.$router.push({
         name: 'Player',
-        params: { id: JSON.parse(file.xhr.response).id },
+        params: { id: JSON.parse(file.xhr.response).result.id },
       });
     },
   },
@@ -92,4 +92,45 @@ export default {
   left: 5px;
   z-index: 0;
 }
+
+.status p:first-child {
+  opacity: 0;
+  -webkit-animation: upload-display 1s 0.2s ease 1;
+          animation: upload-display 1s 0.2s ease 1;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.status p:nth-child(2) {
+  opacity: 0;
+  -webkit-animation: upload-display 1s 0.2s ease 1;
+          animation: upload-display 1s 0.2s ease 1;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.status p:nth-child(3) {
+  opacity: 0;
+  -webkit-animation: upload-display 1.5s 1s ease 1;
+          animation: upload-display 1.5s 1s ease 1;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.status p:nth-child(4) {
+  opacity: 0;
+  -webkit-animation: upload-display 1.5s 1.8s ease 1;
+          animation: upload-display 1.5s 1.8s ease 1;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+  @-webkit-keyframes upload-display {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 </style>

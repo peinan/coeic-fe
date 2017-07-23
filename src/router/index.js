@@ -8,6 +8,10 @@ Vue.use(Router);
 
 export default new Router({
   mode: 'history',
+  beforeEach(to, from, next) {
+    console.log('stop audio');
+    next();
+  },
   routes: [
     {
       path: '/',
