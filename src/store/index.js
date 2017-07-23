@@ -14,6 +14,8 @@ export default new Vuex.Store({
     processedImgs: [],
     // 音声のリスト
     voices: [],
+    // 出力中のaudio
+    audio: null,
   },
   mutations: {
     // 画像リストの全更新
@@ -33,6 +35,16 @@ export default new Vuex.Store({
     // 処理済音声の更新
     setVoices(state, voices) {
       state.voices = voices;
+    },
+    // audio更新
+    setAudio(state, audio) {
+      state.audio = audio;
+    },
+    // audio停止
+    pauseAudio(state) {
+      if (state.audio !== null) {
+        state.audio.pause();
+      }
     },
   },
   getters: {
