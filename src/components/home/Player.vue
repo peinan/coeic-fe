@@ -5,6 +5,7 @@
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
       <a href="#" id="play">再生する</a>
       <br>{{ $route.params.id }}
+      <br><button @click="play">再生する</button>
     </div>
     <div v-else-if="canPlay">
       <div id="black-overlay"></div>
@@ -64,7 +65,7 @@
         <g class="icn-ballon">
           <path opacity="0.8" fill="none" stroke="#333333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
           M66.5,12c-10.355,0-18.75,6.713-18.75,15c0,3.246,1.301,6.241,3.489,8.695l-1.378,5.141l5.863-1.571
-          C58.775,40.982,62.486,42,66.5,42c10.355,0,18.75-6.713,18.75-15S76.855,12,66.5,12z"/>        
+          C58.775,40.982,62.486,42,66.5,42c10.355,0,18.75-6.713,18.75-15S76.855,12,66.5,12z"/>
           <path opacity="0.5" fill="none" stroke="#333333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
           M20.5,3c10.354,0,18.75,6.713,18.75,15c0,3.246-1.302,6.241-3.49,8.695l1.378,5.141l-5.863-1.571C28.225,31.982,24.514,33,20.5,33
           C10.145,33,1.75,26.287,1.75,18S10.145,3,20.5,3z"/>
@@ -87,9 +88,21 @@
 <script>
 export default {
   name: 'player',
+  data() {
+    return {
+      // 初期化時の状態（これによって、コンプリート画面への遷移の有無が決まる）
+      stateCreated: null,
+    };
+  },
   computed: {
+    img() {
+      return this.$store.getters.getImgById(this.$route.params.id);
+    },
     canPlay() {
-      return (this.$store.state.status !== 'done');
+      if (this.img && typeof this.img !== 'undefined') {
+        return (this.img.status === 'done');
+      }
+      return false;
     },
   },
   methods: {
@@ -97,15 +110,34 @@ export default {
      * statusがdoneになるまで1秒おきにstatusを確認する
      */
     checkCanPlay() {
-      this.$store.dispatch('getStatus', { id: this.$route.params.id });
-      console.log(this.$store.state.status);
-      if (!this.canPlay) {
+      this.$store.dispatch('getImg', { id: this.$route.params.id });
+      // ページ遷移しても動き続けてしまうので現在のrouteも確認する
+      if (!this.canPlay && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
       }
     },
+    /**
+     * 再生画面に遷移する
+     */
+    play() {
+      console.log('play!');
+      this.stateCreated = 'done'; // これをtodoでなくせば再生画面に遷移する
+    },
   },
+  // player外から遷移する時に呼ばれる
   created() {
+    const img = this.$store.getters.getImgById(this.$route.params.id);
+    this.stateCreated = img ? img.status : 'undefined';
     this.checkCanPlay();
+  },
+  // player内で遷移する時に呼ばれる
+  beforeRouteUpdate(to, from, next) {
+    // 初期状態更新
+    const img = this.$store.getters.getImgById(to.params.id);
+    this.stateCreated = img ? img.status : 'undefined';
+    // 監視
+    this.checkCanPlay();
+    next();
   },
 };
 </script>
@@ -156,13 +188,13 @@ export default {
   height: auto;
 }
 
-#black-overlay { 
+#black-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.8); 
+  background: rgba(0,0,0,0.8);
   z-index: 3;
 }
 
