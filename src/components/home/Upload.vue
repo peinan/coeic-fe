@@ -2,7 +2,7 @@
   <div class="upload">
     <dropzone
       id="dropzone"
-      url="/api/uploaded-img"
+      :url="url"
       acceptedFileTypes="image/*"
       :maxFileSizeInMB="100"
       :preview-template="template"
@@ -23,6 +23,12 @@ import Dropzone from 'vue2-dropzone';
 
 export default {
   name: 'upload',
+
+  data() {
+    return {
+      url: this.$config.API.UPLOADED_IMG,
+    };
+  },
 
   components: {
     Dropzone,

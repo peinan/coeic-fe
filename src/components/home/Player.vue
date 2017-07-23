@@ -5,6 +5,7 @@
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
       <a href="#" id="play">再生する</a>
       <br>{{ $route.params.id }}
+      <br><button @click="play">再生する</button>
     </div>
     <div v-else-if="canPlay">
       <div id="black-overlay"></div>
@@ -103,6 +104,13 @@ export default {
       if (!this.canPlay) {
         setTimeout(this.checkCanPlay, 1000);
       }
+    },
+    /**
+     * 再生画面に遷移する
+     */
+    play() {
+      console.log('play!');
+      this.stateCreated = 'done'; // これをtodoでなくせば再生画面に遷移する
     },
   },
   created() {
