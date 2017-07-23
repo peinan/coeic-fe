@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="main">
-      <h1><img src="../../assets/logo.png" width="313" height="146" alt="ダイナミックに漫画を楽しむ。coeic（コエック）"></h1>
+      <a href="/"><h1><img src="../../assets/logo.png" width="313" height="146" alt="ダイナミックに漫画を楽しむ。coeic（コエック）"></h1></a>
       <router-view></router-view>
       <img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください">
     </div>
