@@ -2,7 +2,9 @@
   <div id="app">
     <div id="main">
       <router-link :to="{name: 'Upload'}"><h1><img src="../../assets/logo.png" width="313" height="146" alt="ダイナミックに漫画を楽しむ。coeic（コエック）"></h1></router-link>
-      <router-view></router-view>
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
       <p><router-link :to="{name: 'About'}"><img src="../../assets/icn/about.png" width="34" height="34" alt="coeicについて"></router-link></p>
       <p><img src="../../assets/txt/sound-on.png" width="292" height="20" alt="サウンドをオンにしてお楽しみください"></p>
     </div>
@@ -33,5 +35,12 @@ h1, h2 {
   background: url('../../assets/bg/main-base.png') no-repeat center center;
   background-size: cover;
   padding: 40px 10px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0
 }
 </style>
