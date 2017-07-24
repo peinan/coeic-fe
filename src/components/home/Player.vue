@@ -13,7 +13,7 @@
     <div v-else-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="javascript:void(0);" @click="movePlay">再生する</a>
+      <a href="javascript:void(0);" @click="movePlay" id="play">再生する</a>
     </div>
     <div v-else-if="currentView === 'play'">
       <div id="black-overlay" @click="historyBack"></div>

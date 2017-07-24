@@ -56,7 +56,7 @@ body {
 }
 
 .vue-dropzone {
-  border: none;
+  border: none !important;
   color: #333;
 }
 </style>
