@@ -81,7 +81,7 @@
       </g>
       </svg>
       <p><img src="../../assets/txt/in-progress.png" width="152" height="14" alt="漫画を準備しています"></p>
-      <p>※最大で3分かかります</p>
+      <p>※1分程度かかることがあります</p>
     </div>
   </div>
 </template>
