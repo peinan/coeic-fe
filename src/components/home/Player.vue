@@ -1,15 +1,24 @@
 <template>
   <div class="player">
-    <div v-if="currentView === 'complete'">
+    <div v-if="currentView === 'error'">
+      <p>エラーが発生しました。</p>
+      <p>ご迷惑をおかけし、大変申し訳ございません。</p>
+      <a href="javascript:void(0);" @click="errorBack">戻る</a>
+    </div>
+    <div v-if="currentView === 'failure'">
+      <p>正常に処理できませんでした。</p>
+      <p>ご迷惑をおかけし、大変申し訳ございません。</p>
+      <a href="javascript:void(0);" @click="errorBack">戻る</a>
+    </div>
+    <div v-else-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" id="movePlay play">再生する</a>
-      <br><button @click="play" id="play">再生する</button>
+      <a href="javascript:void(0);" @click="movePlay" id="play">再生する</a>
     </div>
     <div v-else-if="currentView === 'play'">
-      <div id="black-overlay"></div>
+      <div id="black-overlay" @click="historyBack"></div>
       <div id="frame-playlist-base">
-        <router-link :to="{name: 'Upload'}"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></router-link>
+        <a href="javascript:void(0);" @click="historyBack"><img src="../../assets/btn/close.png" width="71" height="17" alt="閉じる"></a>
         <ul id="frame-playlist">
           <li v-for="(frame, index) in viewableFrames" :key="index">
             <img v-if="frame !== 'opacity'" :src="frame" :alt="frame" :style="{ width: widths[index] + 'px' }">
@@ -92,6 +101,8 @@ export default {
       currVoiceIndex: null,
       // 再生画面の画像の幅
       widths: ['160px', '500px', '160px'],
+      // error発生時にtrue
+      hasError: false,
     };
   },
   computed: {
@@ -100,9 +111,9 @@ export default {
     },
     canPlay() {
       if (this.img && typeof this.img !== 'undefined') {
-        return (this.img.status === 'DONE');
+        return this.img.status;
       }
-      return false;
+      return 'TODO';
     },
     processedImgs() {
       return this.$store.state.processedImgs;
@@ -112,9 +123,13 @@ export default {
     },
     // 現在表示中のビュー
     currentView() {
-      if (this.canPlay && this.stateCreated === 'TODO') {
+      if (this.hasError) {
+        return 'error';
+      } else if (this.canPlay === 'FAILED') {
+        return 'failure';
+      } else if (this.canPlay === 'DONE' && ['TODO', 'DOING'].includes(this.stateCreated)) {
         return 'complete';
-      } else if (this.canPlay) {
+      } else if (this.canPlay === 'DONE') {
         return 'play';
       }
       return 'processing';
@@ -136,7 +151,7 @@ export default {
     checkCanPlay() {
       this.$store.dispatch('getImg', { id: this.$route.params.id });
       // ページ遷移しても動き続けてしまうので現在のrouteも確認する
-      if (!this.canPlay && this.$route.name === 'Player') {
+      if (['TODO', 'DOING'].includes(this.canPlay) && this.$route.name === 'Player') {
         setTimeout(this.checkCanPlay, 1000);
       }
     },
@@ -178,10 +193,28 @@ export default {
         id: this.$route.params.id,
       });
       Promise.all([imgPromise, voicePromise]).then(() => {
+        if (typeof this.$store.state.voices.length === 'undefined') {
+          // 音声ファイルが存在しない場合は処理しない。
+          this.hasError = true;
+          return;
+        }
         this.currFrame = -1; // 1コマ目なら、この値は0になる（配列のインデックスなので）
         this.currVoiceIndex = -1; // 1つ目なら、この値は0になる（配列のインデックスなので）
         this.playRoop();
       });
+    },
+    /**
+     * 1つ前の画面に戻る
+     */
+    historyBack() {
+      this.$router.go(-1);
+    },
+    /**
+     * 1つ前の画面に戻る
+     */
+    errorBack() {
+      this.$router.push({ name: 'Upload' });
+      this.hasError = false;
     },
   },
   // player外から遷移する時に呼ばれる
@@ -189,15 +222,19 @@ export default {
     if (this.currentView === 'play') {
       this.play();
     }
+
+    this.$store.dispatch('getImgs');
     const img = this.$store.getters.getImgById(this.$route.params.id);
-    this.stateCreated = img ? img.status : 'undefined';
+    this.stateCreated = img ? img.status : 'TODO';
     this.checkCanPlay();
   },
   // player内で遷移する時に呼ばれる
   beforeRouteUpdate(to, from, next) {
+    this.hasError = false;
+
     // 初期状態更新
     const img = this.$store.getters.getImgById(to.params.id);
-    this.stateCreated = img ? img.status : 'undefined';
+    this.stateCreated = img ? img.status : 'TODO';
     // 監視
     this.checkCanPlay();
     next();

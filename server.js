@@ -38,6 +38,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 /** *************************** アクセス制限ここまで *****************************/
 
+// https -> http へリダイレクト
+app.all('*', (req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return next();
+  }
+  if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] === 'https') {
+    res.redirect(`http://${req.headers.host}${req.url}`);
+  }
+  return next();
+});
+
 // API routing（変更する場合はdev-server.jsも変更すること！）
 app.use('/api', api);
 // static file routing

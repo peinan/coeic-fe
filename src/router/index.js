@@ -31,6 +31,12 @@ const router = new Router({
       component: NotFound,
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    return { x: 0, y: 0 };
+  },
 });
 
 // 遷移前に必ず実行
