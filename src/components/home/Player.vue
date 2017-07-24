@@ -3,8 +3,8 @@
     <div v-if="currentView === 'complete'">
       <p><img src="../../assets/icn/book.png" width="49" height="33" alt="ブックアイコン"></p>
       <p><img src="../../assets/txt/done.png" width="134" height="14" alt="準備が完了しました"></p>
-      <a href="#" id="movePlay">再生する</a>
-      <br><button @click="play">再生する</button>
+      <a href="#" id="movePlay play">再生する</a>
+      <br><button @click="play" id="play">再生する</button>
     </div>
     <div v-else-if="currentView === 'play'">
       <div id="black-overlay"></div>
