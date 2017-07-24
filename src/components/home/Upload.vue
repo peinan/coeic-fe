@@ -14,6 +14,7 @@
       <p><img src="../../assets/txt/drag-drop.png" width="179" height="14" alt="漫画をドラッグ＆ドロップ"></p>
       <p>または</p>
       <p><img src="../../assets/btn/file-select.png" width="140" height="40" alt="ファイルを選択"></p>
+      <p>※1ページまたは1コマのjpg, png, gifのみ</p>
     </div>
   </div>
 </template>
@@ -86,7 +87,7 @@ export default {
   height: 270px;
   background: url('../../assets/bg/upload-base.png') no-repeat 0 0;
   margin: 40px auto -280px;
-  padding-top: 30px;
+  padding-top: 15px;
   position: relative;
   top: -320px;
   left: 5px;
