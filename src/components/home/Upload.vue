@@ -2,8 +2,9 @@
   <div class="upload">
     <dropzone
       id="dropzone"
-      url="http://104.155.222.216:5000/api/uploadedImg"
+      url="http://104.155.222.216:5000/api/uploadedImgaaa"
       acceptedFileTypes="image/*"
+      :maxNumberOfFiles="1"
       :maxFileSizeInMB="100"
       :preview-template="template"
       @vdropzone-success="toPlayer"
