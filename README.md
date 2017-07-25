@@ -70,3 +70,6 @@ heroku config:set AUTH=IP
 # BASIC認証
 heroku config:set AUTH=BASIC
 ```
+
+## サンプル画像
+いい感じで読み上げてくれるマンガ画像を `sample_comics` に置いてます。
