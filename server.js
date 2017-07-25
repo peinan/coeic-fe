@@ -53,6 +53,8 @@ app.all('*', (req, res, next) => {
 app.use('/api', api);
 // static file routing
 app.use(serveStatic(path.join(__dirname, 'dist')));
+// どのパスにアクセスされても、index.htmlを開く（その先のルーティングはvue側で行う）
+app.use('*', express.static('./dist/index.html'));
 
 app.listen(port);
 console.log(`server started ${port}`);
